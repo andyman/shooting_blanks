@@ -5,11 +5,16 @@ using System.Collections;
 public class LevelController : MonoBehaviour {
 	
 	public static LevelController instance = null;
+
+
 	public int players = 2; // number of players
 	public int[] actorCounts; // how many clones for each player
 	public Actor[] actorPrefabs; // the prefab for each player
 	public GUIText winnerMessage; // reference to the winner message UI
-	public Transform[] playerHolders; // array of holders, with each holder containing the actors for a player
+
+	// array of holders, with each holder containing the actors for a player.
+	// leave empty in the inspector unless you are preplacing actors
+	public Transform[] playerHolders; 
 
 	int winner = -1; // index of the player that won. -1 for none yet.
 
@@ -99,11 +104,17 @@ public class LevelController : MonoBehaviour {
 		// otherwise see if we need to assign another real clone
 		else if (actor.real && CountPlayerRealActors(player) == 0)
 		{
-			int nextRealActorIndex = Random.Range(0, remainingActorsCount);
-			Actor[] actors = GetActorsForPlayer(player);
-			actors[nextRealActorIndex].real = true; // this just became real for that clone
+			AssignRandomRealActor(player);
 		}
 		
+	}
+
+	// makes one of the actors real
+	public void AssignRandomRealActor(int player)
+	{
+		int nextRealActorIndex = Random.Range(0, CountPlayerActors(player));
+		Actor[] actors = GetActorsForPlayer(player);
+		actors[nextRealActorIndex].real = true; // this just became real for that clone
 	}
 
 	// count the number of actors left for the player
