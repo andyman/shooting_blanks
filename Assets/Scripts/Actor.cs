@@ -64,6 +64,21 @@ public class Actor : MonoBehaviour {
 		{
 			Instantiate(deathPrefab, transform.position, transform.rotation);
 		}
+		
+		// report to the level controller so it can do its logic
+		LevelController.instance.ReportActorDeath(this);
+		
+		// remove this
+		Destroy(this.gameObject);
+	}
+
+	public void ApplyHit(Hazard hazard)
+	{
+		// create a corpse
+		if (deathPrefab != null)
+		{
+			Instantiate(deathPrefab, transform.position, transform.rotation);
+		}
 
 		// report to the level controller so it can do its logic
 		LevelController.instance.ReportActorDeath(this);
