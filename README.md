@@ -15,3 +15,5 @@ Player 1:
 Player 2:
   Movement: arrow keys
   Fire: enter
+
+.
