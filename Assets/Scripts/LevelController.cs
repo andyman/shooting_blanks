@@ -5,11 +5,8 @@ using System.Collections;
 public class LevelController : MonoBehaviour {
 	
 	public static LevelController instance = null;
-
-
-	public int players = 2; // number of players
 	public int[] actorCounts; // how many clones for each player
-	public Actor[] actorPrefabs; // the prefab for each player
+
 	public GUIText winnerMessage; // reference to the winner message UI
 	public GUIText genericMessage;
 
@@ -18,15 +15,21 @@ public class LevelController : MonoBehaviour {
 	public Transform[] playerHolders; 
 
 	int winner = -1; // index of the player that won. -1 for none yet.
-
+	int players = 2; // number of players
+	public Actor[] actorPrefabs = {null, null}; // the prefab for each player
 
 	void Awake() {
 		LevelController.instance = this;
+		// set the actor prefabs based on what was in the menu
+
+
 	}
 
 	// Use this for initialization
 	void Start () {
 
+		actorPrefabs[0] = ActorFactory.instance.actorPrefabs[MenuController.player0];
+		actorPrefabs[1] = ActorFactory.instance.actorPrefabs[MenuController.player1];
 		InitializePlayers();
 	}
 
