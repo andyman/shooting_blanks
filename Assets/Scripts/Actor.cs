@@ -62,7 +62,7 @@ public class Actor : MonoBehaviour {
 		// create a corpse
 		if (deathPrefab != null)
 		{
-			Instantiate(deathPrefab, transform.position, transform.rotation);
+			Instantiate(deathPrefab, transform.position+(new Vector3(0,0,-5.0f)), transform.rotation);
 		}
 		
 		// report to the level controller so it can do its logic
