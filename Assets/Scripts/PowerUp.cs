@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PowerUp : MonoBehaviour {
 
+	float collisionSphereRadius = 5.0f;
 	float powerUpReappearDelay = 2.0f;
 	float messageDisplayTime = 2.0f;
 
@@ -33,8 +34,9 @@ public class PowerUp : MonoBehaviour {
 		otherActor.ApplyPowerUp(this);
 		
 		GUIText guiText = LevelController.instance.genericMessage;
+		int playerNumber = ((otherActor.player + 1) % 2) + 1;
 
-		guiText.text = "Switched opponent's real actor!";
+		guiText.text = "Switched player "+playerNumber+"'s real actor!";
 		guiText.gameObject.SetActive (true);
 
 		gameObject.SetActive(false);
@@ -51,8 +53,12 @@ public class PowerUp : MonoBehaviour {
 	}
 
 	void Reappear()
-	{
-		Vector3 randomPosition = new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-5.0f, 5.0f), 0.0f);
+	{	
+		Vector3 randomPosition = new Vector3(0.0f, 0.0f, 0.0f);
+		do {
+			randomPosition.x = Random.Range(-10.0f, 10.0f);
+			randomPosition.y = Random.Range(-5.0f, 5.0f);
+		} while (Physics.CheckSphere(randomPosition, collisionSphereRadius));
 		Quaternion randomRotation = Quaternion.Euler(0,0, Random.Range (0, 360.0f));
 		
 		transform.position = randomPosition;
