@@ -4,14 +4,14 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
 
 	public int player = -1; // index of player, starting with zero. Use -1 to mean it is not set yet.
-
+	public float lifetime = 5.0f; //max lifetime of projectile in seconds
 	float expirationTime; // time when the bullet is too long lived
 
 	// Use this for initialization
 	void Start () {
 
 		// set up the deathtime of the bullet
-		expirationTime = Time.time + 5.0f;
+		expirationTime = Time.time + lifetime;
 	}
 	
 	// Update is called once per frame
@@ -56,17 +56,13 @@ public class Projectile : MonoBehaviour {
 
 		otherActor.ApplyHit(this);
 
-		// TODO make boom boom effect
-
 		// remove this bullet
 		Destroy(gameObject);
 	}
 
 	void HandleObstacleHit(Collider2D other)
 	{
-		// TODO
 		// When projectile hits a wall, display an effect
-		Debug.Log("TODO: Obstacle hit");
 
 		// and then destroy or recycle the projectile
 		Destroy(gameObject);
