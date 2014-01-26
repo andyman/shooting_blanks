@@ -10,8 +10,8 @@ public class RandomScaleLocation : MonoBehaviour {
 		Quaternion randomRotation = Quaternion.Euler(0,0, Random.Range (0, 360.0f));
 		Vector3 randomScale = transform.localScale;
 		
-		randomScale.x = Random.Range (0.5f, 2.0f);
-		randomScale.y = Random.Range (0.5f, 2.0f);
+		randomScale.x *= Random.Range (0.5f, 2.0f);
+		randomScale.y *= Random.Range (0.5f, 2.0f);
 		
 		transform.localScale = randomScale;
 		transform.position = randomPosition;
