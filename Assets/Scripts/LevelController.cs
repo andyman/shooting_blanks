@@ -14,9 +14,12 @@ public class LevelController : MonoBehaviour {
 	// leave empty in the inspector unless you are preplacing actors
 	public Transform[] playerHolders; 
 
+
+
 	int winner = -1; // index of the player that won. -1 for none yet.
 	int players = 2; // number of players
-	public Actor[] actorPrefabs = {null, null}; // the prefab for each player
+	Actor[] actorPrefabs = {null, null}; // the prefab for each player
+	bool pauseMenuDisplayed = false; // whether the pause menu is displayed
 
 	void Awake() {
 		LevelController.instance = this;
@@ -31,12 +34,18 @@ public class LevelController : MonoBehaviour {
 		actorPrefabs[0] = ActorFactory.instance.actorPrefabs[MenuController.player0];
 		actorPrefabs[1] = ActorFactory.instance.actorPrefabs[MenuController.player1];
 		InitializePlayers();
+		Time.timeScale = 1.0f;
 	}
 
 
 	// Update is called once per frame
 	void Update () {
-	
+		// check for pause menu
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			pauseMenuDisplayed = true;
+			Time.timeScale = 0.0f;
+		}
 	}
 
 	public void InitializePlayers()
@@ -212,10 +221,41 @@ public class LevelController : MonoBehaviour {
 		// displaying the play again button
 		if (winner != -1)
 		{
-			if (GUI.Button (new Rect(Screen.width/2 - 125, Screen.height - 100, 250, 44), "Play Again"))
+			if (GUI.Button (new Rect(Screen.width/2 - 125, Screen.height - 150, 250, 44), "Play Again"))
 			{
 				Application.LoadLevel(Application.loadedLevel);
 			}
+
+			if (GUI.Button (new Rect(Screen.width/2 - 125, Screen.height - 100, 250, 44), "Main Menu"))
+			{
+				Time.timeScale = 1.0f;
+				Application.LoadLevel(0);
+			}
+		}
+		else if (pauseMenuDisplayed)
+		{
+			GUILayout.BeginArea(new Rect(Screen.width/2-100, 200, 200, 400),"box");
+
+			GUILayout.BeginVertical ("box");
+			if (GUILayout.Button("Resume"))
+			{
+				pauseMenuDisplayed = false;
+				Time.timeScale = 1.0f;
+			}
+
+			if (GUILayout.Button("Restart Level"))
+			{
+				Time.timeScale = 1.0f;
+				Application.LoadLevel (Application.loadedLevel);
+			}
+
+			if (GUILayout.Button("Main Menu"))
+			{
+				Time.timeScale = 1.0f;
+				Application.LoadLevel(0);
+			}
+			GUILayout.EndVertical ();
+			GUILayout.EndArea ();
 		}
 	}
 
