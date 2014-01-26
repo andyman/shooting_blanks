@@ -11,6 +11,7 @@ public class LevelController : MonoBehaviour {
 	public int[] actorCounts; // how many clones for each player
 	public Actor[] actorPrefabs; // the prefab for each player
 	public GUIText winnerMessage; // reference to the winner message UI
+	public GUIText genericMessage;
 
 	// array of holders, with each holder containing the actors for a player.
 	// leave empty in the inspector unless you are preplacing actors
@@ -213,5 +214,31 @@ public class LevelController : MonoBehaviour {
 				Application.LoadLevel(Application.loadedLevel);
 			}
 		}
+	}
+
+	// return the index of the real actor for the player
+	int FindRealActor(int player)
+	{
+		Actor[] actors = GetActorsForPlayer(player);
+		for(int actor = 0; actor < actors.Length; actor++) {
+			if(actors[actor].real) return actor;
+		}
+		Debug.Log ("FindRealActor could not find a real actor for player # " + player);
+		return -1;
+	}
+
+
+	// Swap real actor for another player
+	public void ApplyPowerUp(Actor actor)
+	{
+		int player = actor.player;
+		int otherPlayer = (player + 1) % players;
+		int otherPlayerRealActor = FindRealActor(otherPlayer);
+		int otherPlayerActorCount = CountPlayerActors(otherPlayer);
+
+		if( otherPlayerActorCount == 0) { return; } // power up does nothing if only one actor left
+		Actor[] actors = GetActorsForPlayer(otherPlayer);
+		actors[otherPlayerRealActor].real = false;
+		actors [(otherPlayerRealActor + 1) % otherPlayerActorCount].real = true;
 	}
 }
