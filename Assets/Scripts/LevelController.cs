@@ -21,11 +21,15 @@ public class LevelController : MonoBehaviour {
 	Actor[] actorPrefabs = {null, null}; // the prefab for each player
 	bool pauseMenuDisplayed = false; // whether the pause menu is displayed
 
+	GUIText leftInstructions = null;
+	GUIText rightInstructions = null;
+
 	void Awake() {
 		LevelController.instance = this;
 		// set the actor prefabs based on what was in the menu
 
-
+		leftInstructions = GameObject.Find("/_UI/Player 1 Instructions").GetComponent<GUIText>();
+		rightInstructions = GameObject.Find("/_UI/Player 2 Instructions").GetComponent<GUIText>();
 	}
 
 	// Use this for initialization
@@ -35,8 +39,19 @@ public class LevelController : MonoBehaviour {
 		actorPrefabs[1] = ActorFactory.instance.actorPrefabs[MenuController.player1];
 		InitializePlayers();
 		Time.timeScale = 1.0f;
+
+		leftInstructions.text = "<b>" + actorPrefabs[0].name.ToUpper() + "</b>\nMove: w,s,a,n\nFire: Spacebar";
+		rightInstructions.text = "<b>" + actorPrefabs[1].name.ToUpper() + "</b>\nMove: arrow keys\nFire: Enter";	
+		Invoke("UpdateCountGUI",5.0f);
 	}
 
+	void UpdateCountGUI()
+	{
+		leftInstructions.text = "<b>" + actorPrefabs[0].name.ToUpper() + "</b>\n" + CountPlayerActors(0) + " left";
+		rightInstructions.text = "<b>" + actorPrefabs[1].name.ToUpper() + "</b>\n" + CountPlayerActors(1) + " left";
+
+		Invoke("UpdateCountGUI", 0.5f);
+	}
 
 	// Update is called once per frame
 	void Update () {
